@@ -226,7 +226,7 @@ server.listen(8000)
 
 ### authom.registerService(serviceName, Service)
 
-Authom-compliant services can be registered within authom using this method. Useful for adding custom in-house authentication services that would not be suited for widespread/general use. (For example a business's private in-house authentication service.)
+Authom-compliant services can be registered using this method. This is useful for adding custom authentication services not suited to be part of the ```/lib``` core services. (For example a business-specific in-house authentication service.) _Custom services will override existing services of the same name._
 
 ```javascript
 var authom = require("authom")
