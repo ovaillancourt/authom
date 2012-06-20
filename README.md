@@ -230,6 +230,7 @@ Authom-compliant services can be registered using this method. This is useful fo
 
 ```javascript
 var authom = require("authom")
+  , EventEmitter = require("events").EventEmitter
 
 //Custom authentication service
 var IpAuth = function(options) {
