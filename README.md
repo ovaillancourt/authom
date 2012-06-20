@@ -224,6 +224,38 @@ server.on("request", function(req, res) {
 server.listen(8000)
 ```
 
+### authom.registerService(serviceName, Service)
+
+Authom-compliant services can be registered within authom using this method. Useful for adding custom in-house authentication services that would not be suited for widespread/general use. (For example a business's private in-house authentication service.)
+
+```javascript
+var authom = require("authom")
+
+//Custom authentication service
+var IpAuth = function(options) {
+  var server = new EventEmitter
+  var whiteList = options.whiteList || ["127.0.0.1", "::1"]
+
+  server.on("request", function(req, res) {
+    if (~whiteList.indexOf(req.connection.remoteAddress)) {
+      server.emit("auth", req, res, {status: "yay"})
+    }
+    else {
+      server.emit("error", req, res, {status: "boo"})
+    }
+  })
+
+  return server
+}
+
+authom.registerService("ip-auth", IpAuth)
+
+auth.createServer({
+  service: "ip-auth",
+  whiteList : ["127.0.0.1", "::1", "192.168.0.1"]
+})
+```
+
 ### authom.route
 
 A regular expression that is run on the pathname of every request. authom will only run if this expression is matched. By default, it is `/^\/auth\/([^\/]+)\/?$/`.
@@ -231,6 +263,7 @@ A regular expression that is run on the pathname of every request. authom will o
 ### authom.app
 
 This is a convenience Express app, which should be mounted at a path containing a `:service` parameter.
+
 
 Providers
 ---------
